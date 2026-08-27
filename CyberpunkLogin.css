@@ -1,0 +1,217 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cyberpunk-login-wrapper {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000;
+    user-select: none;
+    position: relative;
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.login-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+    pointer-events: none;
+}
+
+/* --- Liquid Glass Card Styles --- */
+.liquid-glass {
+    --scale-factor: 1;
+    pointer-events: auto;
+    width: 360px;
+    padding: 30px;
+    border-radius: 28px;
+    isolation: isolate;
+    position: relative;
+    box-shadow: 0 24px 96px rgba(0, 240, 255, 0.21), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    cursor: grab;
+    transition: transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1), box-shadow 300ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    will-change: transform, left, top;
+    transform: scale(var(--scale-factor));
+    color: #fff;
+}
+
+.liquid-glass.dragging {
+    cursor: grabbing;
+    transition: none !important;
+    transform: scale(calc(var(--scale-factor) + 0.03)) translateY(-4px);
+    z-index: 1000;
+    box-shadow: 0 32px 120px rgba(0, 240, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 28px;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    background-color: rgba(10, 15, 30, 0.45);
+    background-image: linear-gradient(135deg, rgba(0, 240, 255, 0.15), transparent 50%);
+    pointer-events: none;
+}
+
+.liquid-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 28px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    filter: url(#liquid-glass-distortion);
+    -webkit-filter: url(#liquid-glass-distortion);
+    isolation: isolate;
+    pointer-events: none;
+}
+
+.liquid-glass:not(.dragging):hover {
+    transform: scale(var(--scale-factor)) translateY(-4px);
+}
+
+.profile-card-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    text-align: center;
+}
+
+/* --- Login Form Styling --- */
+.login-form {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+    color: #a0aab8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.input-group input:focus {
+    border-color: #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    font-size: 0.85rem;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+}
+
+/* --- Zoom Controls --- */
+.zoom-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.zoom-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s ease, transform 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.zoom-btn:hover {
+    background: rgba(0, 240, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.zoom-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .liquid-glass::after {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .liquid-glass {
+        transition: none;
+    }
+}
